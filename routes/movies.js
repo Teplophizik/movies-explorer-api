@@ -12,7 +12,7 @@ const {
 router.get('/', getMovies);
 router.post('/', celebrate({
   body: Joi.object().keys({
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
     thumbnail: Joi.string().required().custom(urlValidator),

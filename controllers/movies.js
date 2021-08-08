@@ -7,7 +7,7 @@ module.exports.getMovies = (req, res, next) => {
   const owner = req.user._id;
   Movie.find({ owner })
     .then((movies) => res.send(movies))
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports.createMovie = (req, res, next) => {
@@ -32,7 +32,7 @@ module.exports.createMovie = (req, res, next) => {
     owner,
   })
     .then((movie) => res.send(movie))
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports.deleteMovie = (req, res, next) => {
@@ -41,10 +41,9 @@ module.exports.deleteMovie = (req, res, next) => {
     .orFail(() => ApiError.notFound(ERROR_404_MOVIE))
     .then((movie) => {
       if (String(movie.owner) === req.user._id) {
-        Movie.deleteOne({ _id: id }).then(() => res.send({ message: SUCCESS_DELETE }));
-      } else {
-        return Promise.reject(ApiError.forbidden(ERROR_403));
+        return Movie.deleteOne({ _id: id }).then(() => res.send({ message: SUCCESS_DELETE }));
       }
+      return Promise.reject(ApiError.forbidden(ERROR_403));
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
