@@ -17,7 +17,9 @@ router.post('/signin', celebrate({
 router.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
-    email: Joi.string().email().required(),
+    email: Joi.string().email().required().messages({
+      'string.email': 'Ошибка в адресе электронной почты',
+    }),
     password: Joi.string().required(),
   }),
 }), createUser);
